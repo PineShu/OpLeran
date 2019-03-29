@@ -1,0 +1,49 @@
+package pinetree.lifenavi.utils;
+
+import android.opengl.Matrix;
+
+/**
+ * Created by shisk on 2019/3/29.
+ */
+
+public class MatrixHelper {
+    //存储生成矩阵元素的float[]型数组
+    private static float[] mVMatrix = new float[16];
+    //存储生成矩阵元素的loath类型的数组
+    private static float[] mProjMatrix = new float[16];
+
+    /**
+     * 设置相近的 方向 up  位置
+     *
+     * @param rmOffset 起始偏移量
+     * @param eyeX     相机位置
+     * @param eyeY
+     * @param eyeZ
+     * @param centerX  观察方向的位置
+     * @param centerY
+     * @param centerZ
+     * @param upX      up向量的坐标
+     * @param upY
+     * @param upZ
+     */
+    public static void setLookAt(int rmOffset, float eyeX, float eyeY, float eyeZ, float centerX, float centerY, float centerZ, float upX, float upY, float upZ) {
+        Matrix.setLookAtM(mVMatrix, rmOffset, eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ);
+    }
+
+    /**
+     * 设置正交投影 视点为相机的位置 距离视点近垂直于观察方向的称为近平面，距离视点较远垂直于观察方向的远平面far
+     * 垂直于观察方向的 left right bottom top 确定了4个平面的视镜体。
+     *
+     * @param orOffest 偏移量
+     * @param left     近平面对应的x坐标
+     * @param right    近平面对应的x坐标
+     * @param bottom   近平面对应的Y坐标
+     * @param top      近平面对应的Y坐标
+     * @param near     视景体近平面与视点的距离
+     * @param far      视镜体远平面与视点的距离
+     */
+    public static void setOrthoM(int orOffest, float left, float right, float bottom, float top, float near, float far) {
+        Matrix.orthoM(mProjMatrix, orOffest, left, right, bottom, top, near, far);
+    }
+
+}
