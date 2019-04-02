@@ -17,6 +17,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".TutoriaPart" />
+        <activity android:name=".SixStartActivity" />
     </application>
 
 </manifest>

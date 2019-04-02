@@ -21,7 +21,7 @@ public class ShaderUtil {
      * @param source shader的脚本字符串
      * @return
      */
-    public static int loadShader(int shaderType, String source) {
+    private static int loadShader(int shaderType, String source) {
         //创建一个新shader
         int shader = GLES30.glCreateShader(shaderType);
         //若创建成功则加载shader
@@ -40,6 +40,9 @@ public class ShaderUtil {
                 GLES30.glDeleteShader(shader);
                 shader = 0;
             }
+        }else {
+            Log.e("ShaderUtil","shader====0");
+            Log.e("ShaderUtil","shaderType="+shaderType);
         }
         return shader;
     }
