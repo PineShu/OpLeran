@@ -33,6 +33,10 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent();
                     intent.setClass(mainActivity, TutoriaPart.class);
                     startActivity(intent);
+                } else if (positiion == 1) {
+                    Intent intent = new Intent();
+                    intent.setClass(mainActivity, SixStartActivity.class);
+                    startActivity(intent);
                 }
             }
         });

@@ -7,10 +7,13 @@ import android.opengl.Matrix;
  */
 
 public class MatrixHelper {
-    //存储生成矩阵元素的float[]型数组
+    //存储生成矩阵元素的float[]型数组  摄像机矩阵
     private static float[] mVMatrix = new float[16];
-    //存储生成矩阵元素的loath类型的数组
+    //存储生成矩阵元素的loath类型的数组  投影矩阵
     private static float[] mProjMatrix = new float[16];
+    //最终的变换矩阵
+    private static float[] mMvpMatrix;
+
 
     /**
      * 设置相近的 方向 up  位置
@@ -44,6 +47,21 @@ public class MatrixHelper {
      */
     public static void setOrthoM(int orOffest, float left, float right, float bottom, float top, float near, float far) {
         Matrix.orthoM(mProjMatrix, orOffest, left, right, bottom, top, near, far);
+    }
+
+    /**
+     * 获取最终的变换矩阵
+     *
+     * @param spec
+     * @return
+     */
+    public static float[] getFinalMatrix(float[] spec) {
+        mMvpMatrix = new float[16];
+        //摄像机矩阵乘以变换矩阵
+        Matrix.multiplyMM(mMvpMatrix, 0, mVMatrix, 0, spec, 0);
+        //投影矩阵乘以上一步的结果
+        Matrix.multiplyMM(mMvpMatrix, 0, mProjMatrix, 0, mMvpMatrix, 0);
+        return mMvpMatrix;
     }
 
 }
