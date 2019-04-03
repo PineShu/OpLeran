@@ -4,4 +4,5 @@ in vec4  toColor;
 out vec4 fragColor;
 void main(){
   fragColor=toColor;
+
         }

@@ -2,6 +2,9 @@ package pinetree.lifenavi.utils;
 
 import android.opengl.Matrix;
 
+import java.util.Arrays;
+import java.util.Stack;
+
 /**
  * Created by shisk on 2019/3/29.
  */
@@ -13,7 +16,21 @@ public class MatrixHelper {
     private static float[] mProjMatrix = new float[16];
     //最终的变换矩阵
     private static float[] mMvpMatrix;
+    private static float[] currMatrix;//当前变换矩阵
 
+
+    private static Stack<float[]> queue = new Stack();
+
+
+    //将当前变换矩阵存入栈中
+    public static void pushMatrix() {
+        queue.add(Arrays.copyOf(currMatrix, currMatrix.length));
+    }
+
+    //从栈顶取出变换矩阵
+    public static void popMatrix() {
+        currMatrix = queue.pop();
+    }
 
     /**
      * 设置相近的 方向 up  位置
@@ -50,6 +67,26 @@ public class MatrixHelper {
     }
 
     /**
+     * 透视投影
+     * @param orOffest
+     * @param left
+     * @param right
+     * @param bottom
+     * @param top
+     * @param near
+     * @param far
+     */
+    public static void setFrust(int orOffest, float left, float right, float bottom, float top, float near, float far) {
+        Matrix.frustumM(mProjMatrix, orOffest, left, right, bottom, top, near, far);
+    }
+    //沿X、Y、Z轴方向进行平移变换的方法
+    public static void translate(float x,float y,float z)
+    {
+        Matrix.translateM(currMatrix, 0, x, y, z);
+    }
+
+
+    /**
      * 获取最终的变换矩阵
      *
      * @param spec
@@ -62,6 +99,31 @@ public class MatrixHelper {
         //投影矩阵乘以上一步的结果
         Matrix.multiplyMM(mMvpMatrix, 0, mProjMatrix, 0, mMvpMatrix, 0);
         return mMvpMatrix;
+    }
+
+
+    //获取具体物体的总变换矩阵
+    static float[] mMVPMatrix = new float[16];//总变换矩阵
+
+    public static float[] getFinalMatrix()//计算产生总变换矩阵的方法
+    {
+        //摄像机矩阵乘以变换矩阵
+        Matrix.multiplyMM(mMVPMatrix, 0, mVMatrix, 0, currMatrix, 0);
+        //投影矩阵乘以上一步的结果矩阵
+        Matrix.multiplyMM(mMVPMatrix, 0, mProjMatrix, 0, mMVPMatrix, 0);
+        return mMVPMatrix;
+    }
+
+
+    //产生无任何变换的初始矩阵
+    public static void setInitStack() {
+        currMatrix = new float[16];
+        Matrix.setRotateM(currMatrix, 0, 0, 1, 0, 0);
+    }
+
+    //获取具体物体的变换矩阵
+    public static float[] getMMatrix() {
+        return currMatrix;
     }
 
 }

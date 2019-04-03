@@ -37,6 +37,10 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent();
                     intent.setClass(mainActivity, SixStartActivity.class);
                     startActivity(intent);
+                } else if (positiion == 2) {
+                    Intent intent = new Intent();
+                    intent.setClass(mainActivity, CubeActvity.class);
+                    startActivity(intent);
                 }
             }
         });
