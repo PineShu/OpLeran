@@ -11,10 +11,25 @@ import pinetree.lifenavi.view.CubeGLSurfaceView;
  */
 
 public class CubeActvity extends Activity {
+
+    private CubeGLSurfaceView cubeGLSurfaceView;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        CubeGLSurfaceView glSurfaceView = new CubeGLSurfaceView(this);
-        setContentView(glSurfaceView);
+        cubeGLSurfaceView = new CubeGLSurfaceView(this);
+        setContentView(cubeGLSurfaceView);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        cubeGLSurfaceView.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        cubeGLSurfaceView.onPause();
     }
 }

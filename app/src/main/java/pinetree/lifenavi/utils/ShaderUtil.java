@@ -52,12 +52,14 @@ public class ShaderUtil {
         //加载顶点着色器
         int vertexShader = loadShader(GLES30.GL_VERTEX_SHADER, vertexSource);
         if (vertexShader == 0) {
+            pinetree.lifenavi.log.Log.e("ShaderUtils","vertexShader==0");
             return 0;
         }
 
         //加载片元着色器
         int pixelShader = loadShader(GLES30.GL_FRAGMENT_SHADER, fragmentSource);
         if (pixelShader == 0) {
+            pinetree.lifenavi.log.Log.e("ShaderUtils","pixelShader==0");
             return 0;
         }
 

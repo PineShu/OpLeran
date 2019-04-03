@@ -32,8 +32,8 @@ public class CubeGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Re
 
     private void init() {
         setEGLContextClientVersion(3);
-        setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
         setRenderer(this);
+        setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
     }
 
 
@@ -53,7 +53,7 @@ public class CubeGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Re
     public void onSurfaceChanged(GL10 gl, int width, int height) {
         gl.glViewport(0, 0, width, height);
         float ratio = width / (float) height;
-        MatrixHelper.setOrthoM(0, -ratio, ratio, -1, 1, 20, 100);
+        MatrixHelper.setFrust(0, -ratio*0.8f, ratio*1.2f, -1, 1, 20, 100);
         MatrixHelper.setLookAt(0, -16f, 8f, 45, 0f, 0f, 0f, 0f, 1.0f, 0.0f);
         MatrixHelper.setInitStack();
     }
@@ -64,12 +64,13 @@ public class CubeGLSurfaceView extends GLSurfaceView implements GLSurfaceView.Re
         GLES30.glClear(GLES30.GL_DEPTH_BUFFER_BIT | GLES30.GL_COLOR_BUFFER_BIT);
         //绘制原立方体
         MatrixHelper.pushMatrix();//保护现场
+        MatrixHelper.translate(0f, -1, 0);//沿x方向平移3.5
         cube.draw();//绘制立方体
         MatrixHelper.popMatrix();//恢复现场
 
         //绘制变换后的立方体
         MatrixHelper.pushMatrix();//保护现场
-        MatrixHelper.translate(3.5f, 0, 0);//沿x方向平移3.5
+        MatrixHelper.translate(1f, 1.2f, 0);//沿x方向平移3.5
         cube.draw();//绘制立方体
         MatrixHelper.popMatrix();//恢复现场
     }

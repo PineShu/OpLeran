@@ -14,7 +14,7 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity {
 
     RecyclerView recycleListView;
-    String[] itemTexts = {"入门", "基础"};
+    String[] itemTexts = {"入门", "基础","Cube"};
     private MainActivity mainActivity;
 
     @Override
