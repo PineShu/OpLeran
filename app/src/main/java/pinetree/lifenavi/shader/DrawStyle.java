@@ -30,7 +30,7 @@ public class DrawStyle {
 
         program = ShaderUtil.createProgram(vStr, fStr);
 
-        mvpMatrix = GLES30.glGetAttribLocation(program, "uMvpMatrix");
+        mvpMatrix = GLES30.glGetUniformLocation(program, "uMvpMatrix");
         vertexHandle = GLES30.glGetAttribLocation(program, "vPosition");
         colorHandle = GLES30.glGetAttribLocation(program, "vColor");
 
@@ -61,8 +61,8 @@ public class DrawStyle {
     public void draw(int style) {
         GLES30.glUseProgram(program);
         GLES30.glUniformMatrix4fv(mvpMatrix, 1, false, MatrixHelper.getFinalMatrix(), 0);
-        GLES30.glVertexAttribPointer(vertexHandle, 3, GLES30.GL_FLOAT, false, 3 * 4, 0);
-        GLES30.glVertexAttribPointer(colorHandle, 4, GLES30.GL_FLOAT, false, 3 * 4, 0);
+        GLES30.glVertexAttribPointer(vertexHandle, 3, GLES30.GL_FLOAT, false, 3 * 4, vertexBuffer);
+        GLES30.glVertexAttribPointer(colorHandle, 4, GLES30.GL_FLOAT, false, 4 * 4, colorBuffer);
         GLES30.glEnableVertexAttribArray(vertexHandle);
         GLES30.glEnableVertexAttribArray(colorHandle);
         GLES30.glLineWidth(10);
