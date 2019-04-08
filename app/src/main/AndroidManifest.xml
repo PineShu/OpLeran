@@ -19,6 +19,7 @@
         <activity android:name=".TutoriaPart" />
         <activity android:name=".CubeActvity" />
         <activity android:name=".SixStartActivity" />
+        <activity android:name=".StyleActivity" />
     </application>
 
 </manifest>

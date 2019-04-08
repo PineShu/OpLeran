@@ -68,6 +68,7 @@ public class MatrixHelper {
 
     /**
      * 透视投影
+     *
      * @param orOffest
      * @param left
      * @param right
@@ -79,10 +80,15 @@ public class MatrixHelper {
     public static void setFrust(int orOffest, float left, float right, float bottom, float top, float near, float far) {
         Matrix.frustumM(mProjMatrix, orOffest, left, right, bottom, top, near, far);
     }
+
     //沿X、Y、Z轴方向进行平移变换的方法
-    public static void translate(float x,float y,float z)
-    {
+    public static void translate(float x, float y, float z) {
         Matrix.translateM(currMatrix, 0, x, y, z);
+    }
+
+    //沿X、Y、Z轴方向进行旋转
+    public static void roate(int angle, float x, float y, float z) {
+        Matrix.rotateM(currMatrix, 0, angle, x, y, z);
     }
 
 
@@ -124,6 +130,16 @@ public class MatrixHelper {
     //获取具体物体的变换矩阵
     public static float[] getMMatrix() {
         return currMatrix;
+    }
+
+    /**
+     *
+     * @param x
+     * @param y
+     * @param z
+     */
+    public static void scale(float x, float y, float z) {
+        Matrix.scaleM(currMatrix, 0, x, y, z);
     }
 
 }

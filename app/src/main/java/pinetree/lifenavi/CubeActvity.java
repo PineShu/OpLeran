@@ -1,8 +1,11 @@
 package pinetree.lifenavi;
 
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.Window;
+import android.view.WindowManager;
 
 import pinetree.lifenavi.view.CubeGLSurfaceView;
 
@@ -18,6 +21,12 @@ public class CubeActvity extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         cubeGLSurfaceView = new CubeGLSurfaceView(this);
+        // 设置为全屏
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        // 设置为横屏模式
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(cubeGLSurfaceView);
     }
 

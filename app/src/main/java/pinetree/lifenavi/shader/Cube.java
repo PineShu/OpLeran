@@ -167,6 +167,13 @@ public class Cube {
 
     public void draw() {
         GLES30.glUseProgram(program);
+        /**
+         * @mvpMatrix 是该变量在shader中的位置
+         * @count 被赋值的矩阵的数目（因为uniform变量可以是一个数组)
+         * @transpose 变量赋值时该矩阵是否需要转置
+         * @values[] 我们使用的矩阵
+         * @offset[] 传递给uniform的指针
+         */
         GLES30.glUniformMatrix4fv(mvpMatrix, 1, false, MatrixHelper.getFinalMatrix(), 0);
         GLES30.glVertexAttribPointer(vPosition, 3, GLES30.GL_FLOAT, false, 3 * 4, vertexFloatBuffer);
         GLES30.glVertexAttribPointer(vColor, 4, GLES30.GL_FLOAT, false, 4 * 4, colorFloatBuffer);
