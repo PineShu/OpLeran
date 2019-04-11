@@ -40,19 +40,20 @@ public class DrawStyle {
     private void initVertexData() {
         float vertices[] = new float[]{
                 0, 0, 0,
-                1, 1, 0,
-                -1, 1, 0,
-                -1, -1, 0,
-                1, -1, 0};
+                0.9f, 0.9f, 0,
+                -.9f, 0.9f, 0,
+                -.9f, -0.9f, 0,
+                0.9f, -0.9f, 0};
 
         vertexBuffer = VBOHelper.getFloagBufferData(vertices);
+
         // 顶点颜色值数组，每个顶点4个色彩值RGBA
         float colors[] = new float[]{
                 1, 1, 0, 0,// 黄
                 1, 1, 1, 0,// 白
                 0, 1, 0, 0,// 绿
                 1, 1, 1, 0,// 白
-                1, 1, 0, 0,// 黄
+                0, 1, 0, 0,// 黄
         };
         colorBuffer = VBOHelper.getFloagBufferData(colors);
     }

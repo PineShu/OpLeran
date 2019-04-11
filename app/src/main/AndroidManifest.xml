@@ -20,6 +20,7 @@
         <activity android:name=".CubeActvity" />
         <activity android:name=".SixStartActivity" />
         <activity android:name=".StyleActivity" />
+        <activity android:name=".CircleActivity" />
     </application>
 
 </manifest>
