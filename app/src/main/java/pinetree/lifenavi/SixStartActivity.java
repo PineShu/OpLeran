@@ -8,7 +8,7 @@ import android.widget.FrameLayout;
 
 import pinetree.lifenavi.view.SixStarSurfaceView;
 
-public class SixStartActivity extends Activity {
+public class  SixStartActivity extends Activity {
 
     private SixStarSurfaceView sixStarSurfaceView;
 
