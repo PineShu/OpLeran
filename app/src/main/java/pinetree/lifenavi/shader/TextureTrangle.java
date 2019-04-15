@@ -27,16 +27,16 @@ public class TextureTrangle {
     private void init(GLSurfaceView glSurfaceView) {
 
         String vertext = ShaderUtil.loadFromAssetsFile("t_vertex.sh", glSurfaceView.getResources());
-        String frag = ShaderUtil.loadFromAssetsFile("r_frag.sh", glSurfaceView.getResources());
+        String frag = ShaderUtil.loadFromAssetsFile("t_frag.sh", glSurfaceView.getResources());
         program = ShaderUtil.createProgram(vertext, frag);
         vertextHandler = GLES30.glGetAttribLocation(program, "aPosition");
         vColorHandler = GLES30.glGetAttribLocation(program, "texCoor");
         mvpMatrix = GLES30.glGetUniformLocation(program, "mvpMatrix");
         //顶点
         float vertex[] = new float[]{
-                0, 0.9f, 0,
-                -0.9f, -0.9f, 0,
-                0.9f, -0.9f, 0
+                0, 1.6f, 0,
+                -1.6f, -1.6f, 0,
+                1.6f, -1.6f, 0
         };
 
         vCount = vertex.length / 3;
