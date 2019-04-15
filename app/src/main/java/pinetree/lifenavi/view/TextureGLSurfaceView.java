@@ -49,8 +49,9 @@ public class TextureGLSurfaceView extends GLSurfaceView implements GLSurfaceView
         GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, textureID);//绑定纹理ID
         GLES30.glTexParameterf(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_MIN_FILTER,GLES30.GL_NEAREST);
         GLES30.glTexParameterf(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_MIN_FILTER, GLES30.GL_NEAREST);//纹理采样
-        GLES30.glTexParameterf(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_WRAP_S, GLES30.GL_CLAMP_TO_EDGE);//s轴的延伸方式
+        GLES30.glTexParameterf(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_WRAP_S, GLES30.GL_REPEAT);//s轴的延伸方式
         GLES30.glTexParameterf(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_WRAP_T, GLES30.GL_CLAMP_TO_EDGE);//t轴的延伸方式
+        GLES30.glTexParameterf(GLES30.GL_TEXTURE_2D,GLES30.GL_TEXTURE_SWIZZLE_R,GLES30.GL_GREEN);//纹理图的绿色通道填充 采样器的红色通道
         /**
          * @param 纹理类型
          * @param level 纹理层级，
