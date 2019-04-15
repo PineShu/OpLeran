@@ -47,7 +47,9 @@ public class TextureStyle {
 
         vBuffer = VBOHelper.getFloagBufferData(vs);
 
-        float textCoord[] = new float[]{0, 0,};
+        float textCoord[] = new float[]{0, 0, 0, tRange, sRange, tRange, sRange, 0};
+
+        cBuffer = VBOHelper.getFloagBufferData(textCoord);
     }
 
 }
