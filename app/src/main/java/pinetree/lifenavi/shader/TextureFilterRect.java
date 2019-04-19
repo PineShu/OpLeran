@@ -30,7 +30,7 @@ public class TextureFilterRect {
         program = ShaderUtil.createProgram(v, f);
         vertexHandle = GLES30.glGetAttribLocation(program, "aPosition");
         colorHandle = GLES30.glGetAttribLocation(program, "texureCoord");
-        mvpMatrix = GLES30.glGetAttribLocation(program, "mvpMatrix");
+        mvpMatrix = GLES30.glGetUniformLocation(program, "mvpMatrix");
     }
 
     private void initVertex() {
