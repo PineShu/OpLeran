@@ -11,7 +11,7 @@ public class VBOHelper {
      * @param data
      * @return
      */
-    public static FloatBuffer getFloagBufferData(float[] data) {
+    public static  FloatBuffer getFloagBufferData(float[] data) {
         ByteBuffer vbb = ByteBuffer.allocateDirect(data.length * 4);
         vbb.order(ByteOrder.nativeOrder());    //设置字节顺序为本地操作系统顺序
         FloatBuffer mVertexBuffer = vbb.asFloatBuffer();
@@ -19,4 +19,5 @@ public class VBOHelper {
         mVertexBuffer.position(0);
         return mVertexBuffer;
     }
+
 }

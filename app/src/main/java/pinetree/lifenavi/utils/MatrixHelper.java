@@ -87,7 +87,7 @@ public class MatrixHelper {
     }
 
     //沿X、Y、Z轴方向进行旋转
-    public static void roate(int angle, float x, float y, float z) {
+    public static void roate(float angle, float x, float y, float z) {
         Matrix.rotateM(currMatrix, 0, angle, x, y, z);
     }
 
