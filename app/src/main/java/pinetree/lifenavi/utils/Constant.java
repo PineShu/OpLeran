@@ -2,12 +2,10 @@ package pinetree.lifenavi.utils;
 
 public class Constant {
 
-    public static final String vertex_ball = "#verson  300 es \n" +
+    public static final String vertex_ball = "#version  300 es \n" +
             "uniform  mat4  mvpMatrix;\n" +
             "in vec3 aPosition;\n" +
-            "in vce4 vColor;\n" +
             "out vec3 vPosition;\n" +
-            "out vec4  vColor;\n" +
             "void main()\n" +
             "{\n" +
             " gl_Position=mvpMatrix*vec4(aPosition,1);\n" +
@@ -16,7 +14,7 @@ public class Constant {
     public static final String frag_ball = "#version 300 es\n" +
             "precision  mediump   float;\n" +
             "in vec3 vPosition;//顶点坐标\n" +
-            "unifrom float uR;//球的半径\n" +
+            "uniform float uR;//球的半径\n" +
             "out vec4  fragaColor;//输出片元的颜色\n" +
             "void  main()\n" +
             "{\n" +
@@ -27,7 +25,7 @@ public class Constant {
             "  int y=int ((vPosition.y+uR)/span);//当前位置小方块的层数\n" +
             "  int z=int ((vPosition.z+uR)/span);//当前位置小方块的列数\n" +
             "  //计算当前片元行数、层数、列数的和并对2取模\n" +
-            "  int  colorType=int(mod((float(x+y+z),2.0)));\n" +
+            "  int  colorType=int(mod(float(x+y+z),2.0));\n" +
             "  if(colorType==1)\n" +
             "  {\n" +
             "  color = vec3(0.678,0.231,0.129);//红色\n" +

@@ -14,7 +14,7 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity {
 
     RecyclerView recycleListView;
-    String[] itemTexts = {"入门", "基础", "Cube", "darwStyle", "circle","texture","拉伸方式","采样方式"};
+    String[] itemTexts = {"入门", "基础", "Cube", "darwStyle", "circle","texture","拉伸方式","采样方式","ball"};
     private MainActivity mainActivity;
 
     @Override
@@ -60,6 +60,10 @@ public class MainActivity extends AppCompatActivity {
                 }else if (positiion == 7) {
                     Intent intent = new Intent();
                     intent.setClass(mainActivity, TextureWLActivity.class);
+                    startActivity(intent);
+                }else if (positiion == 8) {
+                    Intent intent = new Intent();
+                    intent.setClass(mainActivity, BallActivity.class);
                     startActivity(intent);
                 }
             }

@@ -21,9 +21,9 @@ public class Ball {
 
     private int vCount;
 
-    private float yAngle;
-    private float xAngle;
-    private float zAngle;
+    public float yAngle;
+    public float xAngle;
+    public float zAngle;
 
     public void setyAngle(float yAngle) {
         this.yAngle = yAngle;
@@ -39,11 +39,16 @@ public class Ball {
 
     private float r = 0.8f;
 
-    private void  initShader(){
-        program=ShaderUtil.createProgram(Constant.vertex_ball,Constant.frag_ball);
-        mvpMatrix=GLES30.glGetUniformLocation(program,"mvpMatrix");
-        vHandle=GLES30.glGetAttribLocation(program,"aPosition");
-        uRHanlder=GLES30.glGetAttribLocation(program,"uR");
+    public Ball(){
+        initShader();
+        initVertexData();
+    }
+
+    private void initShader() {
+        program = ShaderUtil.createProgram(Constant.vertex_ball, Constant.frag_ball);
+        mvpMatrix = GLES30.glGetUniformLocation(program, "mvpMatrix");
+        vHandle = GLES30.glGetAttribLocation(program, "aPosition");
+        uRHanlder = GLES30.glGetAttribLocation(program, "uR");
     }
 
 
@@ -98,11 +103,15 @@ public class Ball {
         floatBuffer = VBOHelper.getFloagBufferData(vertices);
     }
 
-    public void draw(){
-        MatrixHelper.roate(xAngle,1,0,0);
-        MatrixHelper.roate(yAngle,0,1,0);
-        MatrixHelper.roate(zAngle,0,0,1);
+    public void draw() {
+        MatrixHelper.roate(xAngle, 1, 0, 0);
+        MatrixHelper.roate(yAngle, 0, 1, 0);
+        MatrixHelper.roate(zAngle, 0, 0, 1);
         GLES30.glUseProgram(program);
-        GLES30.glUniformMatrix4fv(mvpMatrix,1,false,MatrixHelper.getFinalMatrix(),0);
+        GLES30.glUniformMatrix4fv(mvpMatrix, 1, false, MatrixHelper.getFinalMatrix(), 0);
+        GLES30.glUniform1f(uRHanlder, r);
+        GLES30.glVertexAttribPointer(vHandle, 3, GLES30.GL_FLOAT, false, 3 * 4, floatBuffer);
+        GLES30.glEnableVertexAttribArray(vHandle);
+        GLES30.glDrawArrays(GLES30.GL_TRIANGLES, 0, vCount);
     }
 }

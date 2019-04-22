@@ -11,6 +11,6 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:padding="10dp"
-        android:textColor="@color/colorAccent" />
+        android:textColor="@android:color/background_dark" />
 
 </FrameLayout>
