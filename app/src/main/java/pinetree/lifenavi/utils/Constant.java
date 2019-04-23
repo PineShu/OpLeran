@@ -15,7 +15,7 @@ public class Constant {
             "precision  mediump   float;\n" +
             "in vec3 vPosition;//顶点坐标\n" +
             "uniform float uR;//球的半径\n" +
-            "out vec4  fragaColor;//输出片元的颜色\n" +
+            "out vec4  fragColor;//输出片元的颜色\n" +
             "void  main()\n" +
             "{\n" +
             "  vec3 color;\n" +
@@ -26,13 +26,13 @@ public class Constant {
             "  int z=int ((vPosition.z+uR)/span);//当前位置小方块的列数\n" +
             "  //计算当前片元行数、层数、列数的和并对2取模\n" +
             "  int  colorType=int(mod(float(x+y+z),2.0));\n" +
-            "  if(colorType==1)\n" +
+            "  if(colorType == 1)\n" +
             "  {\n" +
             "  color = vec3(0.678,0.231,0.129);//红色\n" +
             "  }else{\n" +
             "  color = vec3(1.0,1.0,1.0);//白色\n" +
             "  }\n" +
-            "  fragaColor=vec4(color,0);\n" +
+            "  fragColor=vec4(color,0);\n" +
             "}\n";
 
 }

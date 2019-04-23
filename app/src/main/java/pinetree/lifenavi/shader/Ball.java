@@ -57,21 +57,22 @@ public class Ball {
         final int angleSpan = 10;//将球进行单位切分的角度
         for (int vAangle = -90; vAangle < 90; vAangle += angleSpan) {
             for (int hAngle = 0; hAngle <= 360; hAngle += angleSpan) {
-                float x0 = (float) (r * Math.cos(Math.toRadians(hAngle)) * Math.cos(Math.toRadians(vAangle)));
+                float x0 = (float) (r * Math.cos(Math.toRadians(vAangle)) * Math.cos(Math.toRadians(hAngle)));
                 float y0 = (float) (r * Math.cos(Math.toRadians(vAangle)) * Math.sin(Math.toRadians(hAngle)));
                 float z0 = (float) (r * Math.sin(Math.toRadians(vAangle)));
-                hAngle += angleSpan;
-                float x1 = (float) (r * Math.cos(Math.toRadians(vAangle)) * Math.cos(Math.toRadians(hAngle)));
-                float y1 = (float) (r * Math.cos(Math.toRadians(vAangle)) * Math.sin(Math.toRadians(hAngle)));
+
+                float x1 = (float) (r * Math.cos(Math.toRadians(vAangle)) * Math.cos(Math.toRadians(hAngle+angleSpan)));
+                float y1 = (float) (r * Math.cos(Math.toRadians(vAangle)) * Math.sin(Math.toRadians(hAngle+angleSpan)));
                 float z1 = (float) (r * Math.sin(Math.toRadians(vAangle)));
-                vAangle += angleSpan;
-                float x2 = (float) (r * Math.cos(Math.toRadians(vAangle)) * Math.cos(Math.toRadians(hAngle)));
-                float y2 = (float) (r * Math.cos(Math.toRadians(vAangle)) * Math.sin(Math.toRadians(hAngle)));
-                float z2 = (float) (r * Math.sin(Math.toRadians(vAangle)));
-                hAngle = hAngle - angleSpan;
-                float x3 = (float) (r * Math.cos(Math.toRadians(vAangle)) * Math.cos(Math.toRadians(hAngle)));
-                float y3 = (float) (r * Math.cos(Math.toRadians(vAangle)) * Math.sin(Math.toRadians(hAngle)));
-                float z3 = (float) (r * Math.sin(Math.toRadians(vAangle)));
+
+                float x2 = (float) (r * Math.cos(Math.toRadians(vAangle+angleSpan)) * Math.cos(Math.toRadians(hAngle+angleSpan)));
+                float y2 = (float) (r * Math.cos(Math.toRadians(vAangle+angleSpan)) * Math.sin(Math.toRadians(hAngle+angleSpan)));
+                float z2 = (float) (r * Math.sin(Math.toRadians(vAangle+angleSpan)));
+
+                float x3 = (float) (r * Math.cos(Math.toRadians(vAangle+angleSpan)) * Math.cos(Math.toRadians(hAngle)));
+                float y3 = (float) (r * Math.cos(Math.toRadians(vAangle+angleSpan)) * Math.sin(Math.toRadians(hAngle)));
+                float z3 = (float) (r * Math.sin(Math.toRadians(vAangle+angleSpan)));
+
 
                 // 将计算出来的XYZ坐标加入存放顶点坐标的ArrayList
                 list.add(x1);
