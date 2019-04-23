@@ -21,11 +21,11 @@ public class Constant {
             "  vec3 color;\n" +
             "  float n=8.0;//球外接立方体每个坐标抽方向切分的份数\n" +
             "  float span=2.0*uR/n;//每一分立方体的边长\n" +
-            "  int x=int ((vPosition.x+uR)/span);//当前片元位置小方块的行数\n" +
-            "  int y=int ((vPosition.y+uR)/span);//当前位置小方块的层数\n" +
-            "  int z=int ((vPosition.z+uR)/span);//当前位置小方块的列数\n" +
+            "  int i=int ((vPosition.x+uR)/span);//当前片元位置小方块的行数\n" +
+            "  int j=int ((vPosition.y+uR)/span);//当前位置小方块的层数\n" +
+            "  int k=int ((vPosition.z+uR)/span);//当前位置小方块的列数\n" +
             "  //计算当前片元行数、层数、列数的和并对2取模\n" +
-            "  int  colorType=int(mod(float(x+y+z),2.0));\n" +
+            "  int  colorType=int(mod(float(i+j+k),2.0));\n" +
             "  if(colorType == 1)\n" +
             "  {\n" +
             "  color = vec3(0.678,0.231,0.129);//红色\n" +

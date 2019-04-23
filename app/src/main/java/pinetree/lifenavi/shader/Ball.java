@@ -48,7 +48,7 @@ public class Ball {
         program = ShaderUtil.createProgram(Constant.vertex_ball, Constant.frag_ball);
         mvpMatrix = GLES30.glGetUniformLocation(program, "mvpMatrix");
         vHandle = GLES30.glGetAttribLocation(program, "aPosition");
-        uRHanlder = GLES30.glGetAttribLocation(program, "uR");
+        uRHanlder = GLES30.glGetUniformLocation(program, "uR");
     }
 
 
