@@ -2,6 +2,7 @@ package pinetree.lifenavi.utils;
 
 import android.opengl.Matrix;
 
+import java.nio.FloatBuffer;
 import java.util.Arrays;
 import java.util.Stack;
 
@@ -20,6 +21,10 @@ public class MatrixHelper {
 
 
     private static Stack<float[]> queue = new Stack();
+
+
+    private static FloatBuffer locationBuffer;
+    private static float[] lightLocation = new float[3];
 
 
     //将当前变换矩阵存入栈中
@@ -133,7 +138,6 @@ public class MatrixHelper {
     }
 
     /**
-     *
      * @param x
      * @param y
      * @param z
@@ -142,4 +146,25 @@ public class MatrixHelper {
         Matrix.scaleM(currMatrix, 0, x, y, z);
     }
 
+    /**
+     * 获取光照位置FloatBuffer
+     *
+     * @return
+     */
+    public static FloatBuffer getLightLocation() {
+        return VBOHelper.getFloagBufferData(lightLocation);
+    }
+
+    /**
+     * 设置光照位置
+     *
+     * @param x
+     * @param y
+     * @param z
+     */
+    public static void setLightLocation(float x, float y, float z) {
+        lightLocation[0] = x;
+        lightLocation[1] = y;
+        lightLocation[2] = z;
+    }
 }

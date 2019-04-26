@@ -4,6 +4,7 @@ import android.opengl.GLES30;
 
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import pinetree.lifenavi.utils.Constant;
@@ -18,7 +19,12 @@ public class Ball {
     private int cHandle;
     private int uRHanlder;
     private FloatBuffer floatBuffer;
+    private FloatBuffer normalBuffer;
 
+
+    private int uMatrix;
+    private int lightLocation;
+    private int normalVec;
     private int vCount;
 
     public float yAngle;
@@ -39,16 +45,19 @@ public class Ball {
 
     private float r = 0.8f;
 
-    public Ball(){
+    public Ball() {
         initShader();
         initVertexData();
     }
 
     private void initShader() {
-        program = ShaderUtil.createProgram(Constant.vertex_ball, Constant.frag_ball);
+        program = ShaderUtil.createProgram(Constant.BALL_DIFFUSE_VERTEX, Constant.BALL_FRAG_DIFFUSE);
         mvpMatrix = GLES30.glGetUniformLocation(program, "mvpMatrix");
         vHandle = GLES30.glGetAttribLocation(program, "aPosition");
         uRHanlder = GLES30.glGetUniformLocation(program, "uR");
+        normalVec = GLES30.glGetAttribLocation(program, "normallVec");
+        uMatrix = GLES30.glGetUniformLocation(program, "mmMatrix");
+        lightLocation = GLES30.glGetUniformLocation(program, "lightLocation");
     }
 
 
@@ -61,17 +70,17 @@ public class Ball {
                 float y0 = (float) (r * Math.cos(Math.toRadians(vAangle)) * Math.sin(Math.toRadians(hAngle)));
                 float z0 = (float) (r * Math.sin(Math.toRadians(vAangle)));
 
-                float x1 = (float) (r * Math.cos(Math.toRadians(vAangle)) * Math.cos(Math.toRadians(hAngle+angleSpan)));
-                float y1 = (float) (r * Math.cos(Math.toRadians(vAangle)) * Math.sin(Math.toRadians(hAngle+angleSpan)));
+                float x1 = (float) (r * Math.cos(Math.toRadians(vAangle)) * Math.cos(Math.toRadians(hAngle + angleSpan)));
+                float y1 = (float) (r * Math.cos(Math.toRadians(vAangle)) * Math.sin(Math.toRadians(hAngle + angleSpan)));
                 float z1 = (float) (r * Math.sin(Math.toRadians(vAangle)));
 
-                float x2 = (float) (r * Math.cos(Math.toRadians(vAangle+angleSpan)) * Math.cos(Math.toRadians(hAngle+angleSpan)));
-                float y2 = (float) (r * Math.cos(Math.toRadians(vAangle+angleSpan)) * Math.sin(Math.toRadians(hAngle+angleSpan)));
-                float z2 = (float) (r * Math.sin(Math.toRadians(vAangle+angleSpan)));
+                float x2 = (float) (r * Math.cos(Math.toRadians(vAangle + angleSpan)) * Math.cos(Math.toRadians(hAngle + angleSpan)));
+                float y2 = (float) (r * Math.cos(Math.toRadians(vAangle + angleSpan)) * Math.sin(Math.toRadians(hAngle + angleSpan)));
+                float z2 = (float) (r * Math.sin(Math.toRadians(vAangle + angleSpan)));
 
-                float x3 = (float) (r * Math.cos(Math.toRadians(vAangle+angleSpan)) * Math.cos(Math.toRadians(hAngle)));
-                float y3 = (float) (r * Math.cos(Math.toRadians(vAangle+angleSpan)) * Math.sin(Math.toRadians(hAngle)));
-                float z3 = (float) (r * Math.sin(Math.toRadians(vAangle+angleSpan)));
+                float x3 = (float) (r * Math.cos(Math.toRadians(vAangle + angleSpan)) * Math.cos(Math.toRadians(hAngle)));
+                float y3 = (float) (r * Math.cos(Math.toRadians(vAangle + angleSpan)) * Math.sin(Math.toRadians(hAngle)));
+                float z3 = (float) (r * Math.sin(Math.toRadians(vAangle + angleSpan)));
 
 
                 // 将计算出来的XYZ坐标加入存放顶点坐标的ArrayList
@@ -102,6 +111,7 @@ public class Ball {
             vertices[i] = list.get(i);
         }
         floatBuffer = VBOHelper.getFloagBufferData(vertices);
+        normalBuffer = VBOHelper.getFloagBufferData(Arrays.copyOf(vertices, vertices.length));
     }
 
     public void draw() {
@@ -109,10 +119,14 @@ public class Ball {
         MatrixHelper.roate(yAngle, 0, 1, 0);
         MatrixHelper.roate(zAngle, 0, 0, 1);
         GLES30.glUseProgram(program);
+        GLES30.glUniform3fv(lightLocation,1,MatrixHelper.getLightLocation());
         GLES30.glUniformMatrix4fv(mvpMatrix, 1, false, MatrixHelper.getFinalMatrix(), 0);
+        GLES30.glUniformMatrix4fv(uMatrix, 1, false, MatrixHelper.getMMatrix(), 0);
         GLES30.glUniform1f(uRHanlder, r);
         GLES30.glVertexAttribPointer(vHandle, 3, GLES30.GL_FLOAT, false, 3 * 4, floatBuffer);
+        GLES30.glVertexAttribPointer(normalVec, 3, GLES30.GL_FLOAT, false, 3 * 4, normalBuffer);
         GLES30.glEnableVertexAttribArray(vHandle);
+        GLES30.glEnableVertexAttribArray(normalVec);
         GLES30.glDrawArrays(GLES30.GL_TRIANGLES, 0, vCount);
     }
 }

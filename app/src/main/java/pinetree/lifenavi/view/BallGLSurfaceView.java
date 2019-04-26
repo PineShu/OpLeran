@@ -22,6 +22,7 @@ public class BallGLSurfaceView extends BaseGLSurfaceView {
 
     private float mPreviousY;//上次的触控位置Y坐标
     private float mPreviousX;//上次的触控位置X坐标
+    private float lightOffset = -4;
 
     public BallGLSurfaceView(Context context) {
         super(context);
@@ -34,10 +35,20 @@ public class BallGLSurfaceView extends BaseGLSurfaceView {
     public void onDrawFrame(GL10 gl) {
         //清除深度缓冲与颜色缓冲
         GLES30.glClear(GLES30.GL_DEPTH_BUFFER_BIT | GLES30.GL_COLOR_BUFFER_BIT);
+
+        MatrixHelper.setLightLocation(lightOffset, 0, 1.5f);
+
         //保护现场
         MatrixHelper.pushMatrix();
         //绘制球
         MatrixHelper.pushMatrix();
+        MatrixHelper.translate(1.2f, 0, 0);
+        ball.draw();
+        MatrixHelper.popMatrix();
+
+        //绘制球
+        MatrixHelper.pushMatrix();
+        MatrixHelper.translate(-1.2f, 0, 0);
         ball.draw();
         MatrixHelper.popMatrix();
         //恢复现场
@@ -84,5 +95,13 @@ public class BallGLSurfaceView extends BaseGLSurfaceView {
         mPreviousY = y;//记录触控笔位置
         mPreviousX = x;//记录触控笔位置
         return true;
+    }
+
+    /**
+     * 设置光照位置
+     * @param v
+     */
+    public void setLightOffset(float v) {
+        this.lightOffset = v;
     }
 }
