@@ -25,6 +25,7 @@ public class Ball {
     private int uMatrix;
     private int lightLocation;
     private int normalVec;
+    private int cameraLoc;
     private int vCount;
 
     public float yAngle;
@@ -58,6 +59,7 @@ public class Ball {
         normalVec = GLES30.glGetAttribLocation(program, "normallVec");
         uMatrix = GLES30.glGetUniformLocation(program, "mmMatrix");
         lightLocation = GLES30.glGetUniformLocation(program, "lightLocation");
+        cameraLoc = GLES30.glGetUniformLocation(program, "cameraLocation");
     }
 
 
@@ -120,6 +122,7 @@ public class Ball {
         MatrixHelper.roate(zAngle, 0, 0, 1);
         GLES30.glUseProgram(program);
         GLES30.glUniform3fv(lightLocation,1,MatrixHelper.getLightLocation());
+        GLES30.glUniform3fv(cameraLoc,1,MatrixHelper.getCameraLocationBuffer());
         GLES30.glUniformMatrix4fv(mvpMatrix, 1, false, MatrixHelper.getFinalMatrix(), 0);
         GLES30.glUniformMatrix4fv(uMatrix, 1, false, MatrixHelper.getMMatrix(), 0);
         GLES30.glUniform1f(uRHanlder, r);

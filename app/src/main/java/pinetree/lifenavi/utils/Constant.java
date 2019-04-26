@@ -42,6 +42,7 @@ public class Constant {
             "in vec3 aPosition;\n" +
             " uniform mat4 mvpMatrix;\n" +
             " uniform  mat4 mmMatrix;\n" +
+            " uniform  vec3 cameraLocation;\n" +
             "out vec3  vPosition;\n" +
             "out vec4  vDiffuse;\n" +
             "uniform  vec3  lightLocation;\n" +
@@ -57,7 +58,11 @@ public class Constant {
             "  vec3 newNormal=(mmMatrix*vec4(nomalTarget,1)).xyz-(mmMatrix*vec4(aPosition,1)).xyz;//变换后的法向量\n" +
             "  newNormal=normalize(newNormal);//规格化法向量\n" +
             "  vec3 vp =normalize(lightLocation-(mmMatrix*vec4(aPosition,1)).xyz);//表面点到光源位置的向量。\n" +
-            "  float  mDot=max(0.0,dot(vp,newNormal));//法向量与入射向量的夹角余弦值。\n" +
+            "  vec3 eye =normalize(cameraLocation-(mmMatrix*vec4(aPosition,1)).xyz);//表面点到光源位置的向量。\n" +
+            "  vec3  vHalf=normalize(eye+vp);//法向量与入射向量的夹角余弦值。\n" +
+            "  float  cvalue=dot(newNormal,vHalf);\n" +
+            "  float  shininess=50.0;\n" +
+            "  float  mDot=max(0.0,pow(cvalue,shininess));//粗糙度越小光照面积越大。\n" +
             "  diffuse=lDiffuse*mDot;//散射光最终强度 \n" +
             "}\n" +
             "\n" +

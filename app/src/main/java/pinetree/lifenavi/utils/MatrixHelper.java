@@ -24,7 +24,9 @@ public class MatrixHelper {
 
 
     private static FloatBuffer locationBuffer;
+    private static FloatBuffer cameraLocationBuffer;
     private static float[] lightLocation = new float[3];
+    private static float[] cameraLocation = new float[3];
 
 
     //将当前变换矩阵存入栈中
@@ -52,6 +54,10 @@ public class MatrixHelper {
      * @param upZ
      */
     public static void setLookAt(int rmOffset, float eyeX, float eyeY, float eyeZ, float centerX, float centerY, float centerZ, float upX, float upY, float upZ) {
+        cameraLocation[0] = eyeX;
+        cameraLocation[1] = eyeY;
+        cameraLocation[2] = eyeZ;
+        cameraLocationBuffer = VBOHelper.getFloagBufferData(cameraLocation);
         Matrix.setLookAtM(mVMatrix, rmOffset, eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ);
     }
 
@@ -166,5 +172,13 @@ public class MatrixHelper {
         lightLocation[0] = x;
         lightLocation[1] = y;
         lightLocation[2] = z;
+    }
+    /**
+     * 获取相机数据
+     *
+     * @return
+     */
+    public static FloatBuffer getCameraLocationBuffer() {
+        return cameraLocationBuffer;
     }
 }
