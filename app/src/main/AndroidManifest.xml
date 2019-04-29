@@ -24,6 +24,7 @@
         <activity android:name=".TextureStyleActvitity" />
         <activity android:name=".BallActivity" />
         <activity android:name=".TextureWLActivity" />
+        <activity android:name=".BallActivity" />
     </application>
 
 </manifest>

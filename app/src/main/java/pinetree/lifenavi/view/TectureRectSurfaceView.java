@@ -64,7 +64,7 @@ public class TectureRectSurfaceView extends BaseGLSurfaceView {
 
     @Override
     public void onDrawFrame(GL10 gl) {
-//清除深度缓冲与颜色缓冲
+        //清除深度缓冲与颜色缓冲
         GLES30.glClear(GLES30.GL_DEPTH_BUFFER_BIT | GLES30.GL_COLOR_BUFFER_BIT);
         //绘制小纹理矩形
         MatrixHelper.pushMatrix();    //保存当前的变换矩阵

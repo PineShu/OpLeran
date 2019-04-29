@@ -1,0 +1,87 @@
+Earth vertex
+
+#version 300 es
+uniform mat4 mvpMatrix;\\总变换矩阵
+uniform mat4 mMatrix;\\变换矩阵
+in vec3 aPosition;\\ 顶点位置
+uniform  vec3 lightLoc;\\光源位置
+uniform  vec3 cameraLoc;\\相机位置
+in vec2 textureCood;\\顶点的纹理坐标
+in vec3 vNormal;\\法向量
+out vec2  vTextureCoord;
+out vec4 vAmbient;
+out vec4 vDiffuse;
+out vec4 vSpecular;
+//球环境光 散射光 镜面光
+void lightCaculate(vec3 normal,inout vec4 ambient,inout diffuse,inout specular,in vec3 lightLocation,in vec4 lightAmbient,in vec4 lightDiffuse,in vec4 lightSpecular)
+{
+   //环境光  材质系数 * 环境光强度
+   ambient=lightAmbient;  //直接得出环境光的强度
+   //--satart--散射光  材质系数 * 散射光强度 * max(cos(入射角)，0);
+   //入射角光源位置与法向量的夹角
+   vec3 normalTarget=normal+aPosition;
+   vec3 newNoarml=(mMatrix*vec4(normalTarget,1)).xyz-(mMatrix*vec4(aPosition,1)).xyz;    //计算变换后的法向量
+   newNoarml=normalize(newNoarml);//规格化法向量
+   vec3 lightV=(lightLoc-(mMatrix*vec4(aPosition,1)).xyz;//表面点到光源位置的向量
+   lightV=normalize(lightV);
+   vec3 cValue=max(0,dot(newNoarml,lightV));
+   diffuse=lightDiffuse*cValue;
+   //镜面光  材质系数 * 镜面光强度 * max(cos(半向角)，0)粗糙度;  添加粗糙度 就是对最大入射角 交粗糙度的平方，粗糙度越小 越光滑。
+   //半向角= 光源向量+ 摄像头位置向量
+   vec3 cameraVa=normalize((cameraLoc-(mMatrix*vec4(aPosition,1)).xyz);//从表面点到相机的向量
+   vec3 halfValue=normalTarget(cameraVa+lightV);
+   float shininess =50;//粗糙度，越小越光滑
+   float cValueHalf=dot(newNoarml,halfValue);
+   specular=lightSpecular*max(0.0,pow(cValueHalf,shininess))；
+}
+
+void main()
+{
+
+ gl_Position=mvpMatrix*vec4(aPosition,1);
+
+ vec4  abimetTemp=vec4(0.0,0.0,0.0,0.0);
+ vec4  diffuseTemp=vec4(0.0,0.0,0.0,0.0);
+ vec4  specularTemp=vec4(0.0,0.0,0.0,0.0);
+
+ lightCaculate(normalize(vNormal),abimetTemp,diffuseTemp,specularTemp,vec4(0.05,0.05,0.05,1.0),vec4(1.0,1.0,1.0,1.0),vec4(0.3,0.3,0.3,1.0));
+
+ vAmbient=abimetTemp;
+ vDiffuse=diffuseTemp;
+ vSpecular=specularTemp;
+
+ vTextureCoord=textureCood;
+
+}
+
+Earth Frag
+
+#version 300 es
+precision mediump  float;
+in vec2 vTextureCoord;
+in vec4 vAmbient;
+in vec4 vDiffuse;
+in vec4 vSpecular;
+
+uniform sampler2D sTextureDay;
+uniform sampler2D sTextureNight;
+out vec4 fragColor;
+void main()
+{
+ vec4 finalDayColor;//从白天纹理中提取颜色
+ vec4 finalDayNight;//从夜晚纹理中提取到的颜色
+
+ finalDayColor=texture(sTextureDay,vTextureCoord)*(vAmbient+vDiffuse+vSpecular);//采样出白天纹理的颜色值,计算出改片元白天的颜色值。
+ finalDayNight=texture(sTextureDay,vTextureCoord)**vec4(0.5,0.5,0.5,1.0);//采样出夜晚纹理的颜色值,计算出的该片元夜晚颜色值
+
+ if(vDiffuse.x>0.21)
+  {
+    fragColor=finalDayColor;//白天颜色
+  }else if (vDiffuse.x<0.05){
+    fragColor=finalDayNight;//采用夜晚纹理
+  }else{
+    float t=(vDiffuse-0.05)/0.16;
+    fragColor=t*finalDayColor+(1.0-t)*finalDayNight;
+  }
+
+}
