@@ -1,0 +1,97 @@
+星空的星星
+vertex.txt
+#version 300 es
+uniform mat4 mvpMatrix;
+uniform float uPointSize;
+in vec3 aPosition;
+void main()
+{
+ gl_Position=mvpMatrix*vec4(aPosition,1);
+ gl_PointSize=uPointSize;
+}
+frag.txt
+#version 300 es
+precision mediump  float;
+out vec4 fragColor;
+void main()
+{
+ fragColor=vec4(1.0,1.0,1.0,1.0);
+}
+
+
+moon vertex>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+#version 300 es
+uniform mat4 mvpMatrix;
+uniform mat mMatrix;
+uniform vec3 cameraLoc;
+uniform vec3 lightLoc;
+in vec3 aPosition;
+in vec2 aTexture;//纹理坐标
+in vec3 vNormal;// 法向量
+out vec2 textureCoord;
+out ve4 vAbminet;//环境光
+out ve4 vDiffuse;//散射光
+out ve4 vSpecular;//镜面光
+//in vec3 normal 法向量
+//inout vec4 mAmbient 环境光强度
+//inout vec4 mDiffuse 散射光强度
+//inout vec4 mSpecular 镜面光强度
+void lightCaculate(in vec3 normal,inout vec4 ambient,inout vec4 diffuse,inout vec4 specular,in vec3 lightLocation,in vec4 lAmbinet,in vec4 lDiffuse,in vec4 lSpecular)
+{
+  ambient=lAmbinet;//环境光是360度均匀的 所以直接给出环境光
+  //散射光  散射光：散射光系数*散射光强度*max（0.0，cos(法向量，光照位置)）// cos -1---->1 的取值范围   cos0=1  cos90=0  cos180=-1
+  vec3 normalTarget=aPosition+normal;//变换后的法向量，法向量与顶点位置相同 所以向量没有出物体，相加让向量出物体
+  vec3 newNormal=(mMatrix*vec4(normalTarget,1).xyz-mMatrix*vec4(mMatrix*vec4(aPosition,1)).xyz)//得到从物体表面顶点到 物体外的向量
+  newNormal=normalize(newNormal);//规格化法向量
+  //计算从表面点到相机的向量
+  vec3 eye=normalize(cameraLoc-mMatrix*ve4(aPosition,1).xyz);
+  //计算从表面点到光源位置的向量
+  vec3 vp=normalize(lightLocation-mMatrix*ve4(aPosition,1).xyz);
+  // 散射光 的最终强度
+  // 法向量与光照的 cos值
+  float dotSize=max(0.0,dot(newNormal,vp));
+  diffuse=lDiffuse*dotSize;
+  //镜面光  镜面光的系数*镜面光强度*max(0.0,cos(半向量，法向量)(粗糙度))
+  //求半向量
+  vec3 half=normalize(vp+eye);
+  float shines=50.0;
+  float sDotSize=dot(newNormal,half);//法向量与半向量的点积
+  float specularFactor=max(0.0,pow(sDotSize,shines)); //镜面光强度因子
+  specular=lSpecular*specularFactor;//镜面光的最终强度
+}
+
+void main()
+{
+   gl_Position=mvpMatrix*vec4(aPosition,1);
+   vec4 ambientTemp=vec4(0.0,0.0,0.0,0.0);
+   vec4 diffuseTemp=vec4(0.0,0.0,0.0,0.0);
+   vec4 specularTemp=vec4(0.0,0.0,0.0,0.0);
+   lightCaculate(normalize(vNormal),ambientTemp,diffuseTemp,specularTemp,lightLoc,vec4(0.05,0.05,0.025,1.0),vec4(1.0,1.0,0.5,1.0),vec4(0.3,0.3,0.15,1.0));
+   vAbminet=ambientTemp;
+   mDiffuse=diffuseTemp;
+   mSpecular=specularTemp;
+
+   textureCoord=aTexture;
+}
+
+moon vertex>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+moon frag
+
+>>>>>>>>>>>>>>>>>>>>
+#version 300 es
+precision  mediump  float;
+in vec2 textureCoord;
+in vec4 vAbminet;
+in vec4 vDiffuse;
+in vec4 vSpecular;
+uniform  sampler2D sTexture;//纹理数据内容
+out vec4 fragColor;
+void main()
+{
+ vec4 finalColor=texture(sTexture,textureCoord);
+ fragColor=finalColor*(vAbminet+vDiffuse+vSpecular);
+}
+
+>>>>>>>>>>>>>>>>>>>>
+

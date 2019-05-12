@@ -11,10 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import pinetree.lifenavi.earth.EarthActivity;
+
 public class MainActivity extends AppCompatActivity {
 
     RecyclerView recycleListView;
-    String[] itemTexts = {"入门", "基础", "Cube", "darwStyle", "circle","texture","拉伸方式","采样方式","ball"};
+    String[] itemTexts = {"入门", "基础", "Cube", "darwStyle", "circle","texture","拉伸方式","采样方式","ball","Earth"};
     private MainActivity mainActivity;
 
     @Override
@@ -64,6 +66,10 @@ public class MainActivity extends AppCompatActivity {
                 }else if (positiion == 8) {
                     Intent intent = new Intent();
                     intent.setClass(mainActivity, BallActivity.class);
+                    startActivity(intent);
+                }else if (positiion == 9) {
+                    Intent intent = new Intent();
+                    intent.setClass(mainActivity, EarthActivity.class);
                     startActivity(intent);
                 }
             }

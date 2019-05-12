@@ -125,19 +125,19 @@ public class Constant {
             "}";
 
     public static final String EARTH_VERTEX="#version 300 es\n" +
-            "uniform mat4 mvpMatrix;\\\\总变换矩阵\n" +
-            "uniform mat4 mMatrix;\\\\变换矩阵\n" +
-            "in vec3 aPosition;\\\\ 顶点位置\n" +
-            "uniform  vec3 lightLoc;\\\\光源位置\n" +
-            "uniform  vec3 cameraLoc;\\\\相机位置\n" +
-            "in vec2 textureCood;\\\\顶点的纹理坐标\n" +
-            "in vec3 vNormal;\\\\法向量\n" +
+            "uniform mat4 mvpMatrix;\\总变换矩阵\n" +
+            "uniform mat4 mMatrix;\\变换矩阵\n" +
+            "in vec3 aPosition;\\ 顶点位置\n" +
+            "uniform  vec3 lightLoc;\\光源位置\n" +
+            "uniform  vec3 cameraLoc;\\相机位置\n" +
+            "in vec2 textureCood;\\顶点的纹理坐标\n" +
+            "in vec3 vNormal;\\法向量\n" +
             "out vec2  vTextureCoord;\n" +
             "out vec4 vAmbient;\n" +
             "out vec4 vDiffuse;\n" +
             "out vec4 vSpecular;\n" +
             "//球环境光 散射光 镜面光\n" +
-            "void lightCaculate(vec3 normal,inout vec4 ambient,inout diffuse,inout specular,in vec3 lightLocation,in vec4 lightAmbient,in vec4 lightDiffuse,in vec4 lightSpecular)\n" +
+            "void lightCaculate(in vec3 normal,inout vec4 ambient,inout vec4 diffuse,inout vec4 specular,in vec3 lightLocation,in vec4 lightAmbient,in vec4 lightDiffuse,in vec4 lightSpecular)\n" +
             "{\n" +
             "   //环境光  材质系数 * 环境光强度\n" +
             "   ambient=lightAmbient;  //直接得出环境光的强度\n" +
@@ -146,15 +146,14 @@ public class Constant {
             "   vec3 normalTarget=normal+aPosition;\n" +
             "   vec3 newNoarml=(mMatrix*vec4(normalTarget,1)).xyz-(mMatrix*vec4(aPosition,1)).xyz;    //计算变换后的法向量\n" +
             "   newNoarml=normalize(newNoarml);//规格化法向量\n" +
-            "   vec3 lightV=(lightLoc-(mMatrix*vec4(aPosition,1)).xyz;//表面点到光源位置的向量\n" +
-            "   lightV=normalize(lightV);\n" +
-            "   vec3 cValue=max(0,dot(newNoarml,lightV));\n" +
+            "   vec3 lightV=normalize(lightLocation-(mMatrix*vec4(aPosition,1)).xyz);//表面点到光源位置的向量\n" +
+            "   float cValue=max(0,dot(newNoarml,lightV));\n" +
             "   diffuse=lightDiffuse*cValue;\n" +
             "   //镜面光  材质系数 * 镜面光强度 * max(cos(半向角)，0)粗糙度;  添加粗糙度 就是对最大入射角 交粗糙度的平方，粗糙度越小 越光滑。\n" +
             "   //半向角= 光源向量+ 摄像头位置向量\n" +
-            "   vec3 cameraVa=normalize((cameraLoc-(mMatrix*vec4(aPosition,1)).xyz);//从表面点到相机的向量\n" +
-            "   vec3 halfValue=normalTarget(cameraVa+lightV);\n" +
-            "   float shininess =50;//粗糙度，越小越光滑\n" +
+            "   vec3 cameraVa=normalize(cameraLoc-(mMatrix*vec4(aPosition,1)).xyz);//从表面点到相机的向量\n" +
+            "   vec3 halfValue=normalize(cameraVa+lightV);\n" +
+            "   float shininess =50.0;//粗糙度，越小越光滑\n" +
             "   float cValueHalf=dot(newNoarml,halfValue);\n" +
             "   specular=lightSpecular*max(0.0,pow(cValueHalf,shininess))；\n" +
             "}\n" +
@@ -207,4 +206,82 @@ public class Constant {
             "\n" +
             "}";
 
+
+    public static final String MOON_FRAG="#version 300 es\n" +
+            "precision mediump float;\t//给出浮点默认精度\n" +
+            "in vec2 texurCoord;//接收从顶点着色器过来的参数\n" +
+            "in vec4 vAmbient;\n" +
+            "in vec4 vDiffuse;\n" +
+            "in vec4 vSpecular;\n" +
+            "out vec4 fragColor;\n" +
+            "uniform sampler2D sTexture;//纹理内容数据\n" +
+            "void main()                         \n" +
+            "{  //月球着色器的main方法\n" +
+            "  //给此片元从纹理中采样出颜色值            \n" +
+            "  vec4 finalColor = texture(sTexture, texurCoord); \n" +
+            "  //给此片元颜色值 \n" +
+            "  fragColor = finalColor*vAmbient+finalColor*vSpecular+finalColor*vDiffuse;\n" +
+            "}          ";
+
+
+    public static final String MOON_VERTEX="#version 300 es\n" +
+            "uniform mat4 mvpMatrix;\n" +
+            "uniform mat4 mmMatrex;\n" +
+            "uniform vec3 uCamera;\n" +
+            "uniform vec3 lightLocation;\n" +
+            "in vec3 aPosition;\n" +
+            "in vec2 aTexureCoord;\n" +
+            "in vec3 aNormal;\n" +
+            "out vec2 texurCoord;//传递给片元着色器\n" +
+            "out vec4 vAmbient;\n" +
+            "out vec4 vDiffuse;\n" +
+            "out vec4 vSpecular;\n" +
+            "//normal 法向量\n" +
+            "//abiment 环境光 diffuse 散射光 specular 镜面光\n" +
+            "//lightLoc 光照位置\n" +
+            "//三种光照的强度\n" +
+            "void  caculateLight(in vec3 normal,inout vec4 ambient,inout vec4 diffuse,inout vec4 specular,in vec3 lightLoc,\n" +
+            "                in vec4 lightAbiment,in vec4 lightDiffuse,in vec4 lightSpecular)\n" +
+            "{\n" +
+            "  ambient=lightAbiment;//直接得出环境光信息，因为他是360度均匀散射的\n" +
+            "  //散射光=散射光系数*散射光强度*max(cos(顶点法向量与光照位置的夹角，0))\n" +
+            "  vec3 normalTarget=aPosition+normal;//计算变换后的法向量\n" +
+            "  vec3 newNormal=(mmMatrex*vec4(normalTarget,1)).xyz-(mmMatrex*vec4(aPosition,1)).xyz;//求出指向球体的法向量\n" +
+            "  newNormal=normalize(newNormal);//规格化法向量\n" +
+            "  //相机规格化后的向量\n" +
+            "  vec3 eye=normalize(uCamera-(mmMatrex*vec4(aPosition,1)).xyz);//指向球体的摄像头向量\n" +
+            "  //光照位置规格化后的向量\n" +
+            "  vec3 lightv=normalize(lightLoc-(mmMatrex*vec4(aPosition,1)).xyz);//指向球体的光照向量\n" +
+            "  //光照与相机位置的半向量\n" +
+            "  vec3 halfVector=normalize(eye+lightv);\n" +
+            "\n" +
+            "  float shinness=50.0;//粗糙度 越小越光滑\n" +
+            "    //散射光=散射光系数*散射光强度*max(cos(顶点法向量与光照位置的夹角，0))\n" +
+            "\n" +
+            "    float mDot=max(0.0,dot(newNormal,lightv));//cos 光照与法向量\n" +
+            "    diffuse=lightDiffuse*mDot;\n" +
+            "    //镜面光=镜面光系数*镜面光强度*cos(half,normal)的粗糙度的平方。\n" +
+            "    float dotSpecular=dot(newNormal,halfVector)\n" +
+            "    float mDotSpe=max(0.0,pow(dotSpecular,shinness));//cos 光照与法向量\n" +
+            "    specular=lightSpecular*mDotSpe\n" +
+            "}\n" +
+            "void main()\n" +
+            "{\n" +
+            "\n" +
+            "   gl_Position = mvpMatrix * vec4(aPosition,1); //根据总变换矩阵计算此次绘制此顶点位置\n" +
+            "\n" +
+            "   vec4 ambientTemp=vec4(0.0,0.0,0.0,0.0);\n" +
+            "   vec4 diffuseTemp=vec4(0.0,0.0,0.0,0.0);\n" +
+            "   vec4 specularTemp=vec4(0.0,0.0,0.0,0.0);\n" +
+            "\n" +
+            "   caculateLight(normalize(aNormal),ambientTemp,diffuseTemp,specularTemp,uLightLocationSun,vec4(0.05,0.05,0.025,1.0),vec4(1.0,1.0,0.5,1.0),vec4(0.3,0.3,0.15,1.0));\n" +
+            "\n" +
+            "   vAmbient=ambientTemp;\n" +
+            "   vDiffuse=diffuseTemp;\n" +
+            "   vSpecular=specularTemp;\n" +
+            "\n" +
+            "   //将顶点的纹理坐标传给片元着色器\n" +
+            "   texurCoord=aTexureCoord;\n" +
+            "}\n" +
+            "\n";
 }

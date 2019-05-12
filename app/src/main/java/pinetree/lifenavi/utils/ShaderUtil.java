@@ -16,9 +16,8 @@ public class ShaderUtil {
     //加载制定shader的方法
 
     /**
-     *
      * @param shaderType shader的类型  GLES30.GL_VERTEX_SHADER   GLES30.GL_FRAGMENT_SHADER
-     * @param source shader的脚本字符串
+     * @param source     shader的脚本字符串
      * @return
      */
     private static int loadShader(int shaderType, String source) {
@@ -40,9 +39,9 @@ public class ShaderUtil {
                 GLES30.glDeleteShader(shader);
                 shader = 0;
             }
-        }else {
-            Log.e("ShaderUtil","shader====0");
-            Log.e("ShaderUtil","shaderType="+shaderType);
+        } else {
+            Log.e("ShaderUtil", "shader====0");
+            Log.e("ShaderUtil", "shaderType=" + shaderType);
         }
         return shader;
     }
@@ -52,14 +51,65 @@ public class ShaderUtil {
         //加载顶点着色器
         int vertexShader = loadShader(GLES30.GL_VERTEX_SHADER, vertexSource);
         if (vertexShader == 0) {
-            pinetree.lifenavi.log.Log.e("ShaderUtils","vertexShader==0");
+            pinetree.lifenavi.log.Log.e("ShaderUtils", "vertexShader==0");
             return 0;
         }
 
         //加载片元着色器
         int pixelShader = loadShader(GLES30.GL_FRAGMENT_SHADER, fragmentSource);
         if (pixelShader == 0) {
-            pinetree.lifenavi.log.Log.e("ShaderUtils","pixelShader==0");
+            pinetree.lifenavi.log.Log.e("ShaderUtils", "pixelShader==0");
+            return 0;
+        }
+
+        //创建程序
+        int program = GLES30.glCreateProgram();
+        //若程序创建成功则向程序中加入顶点着色器与片元着色器
+        if (program != 0) {
+            //向程序中加入顶点着色器
+            GLES30.glAttachShader(program, vertexShader);
+            checkGlError("glAttachShader");
+            //向程序中加入片元着色器
+            GLES30.glAttachShader(program, pixelShader);
+            checkGlError("glAttachShader");
+            //链接程序
+            GLES30.glLinkProgram(program);
+            //存放链接成功program数量的数组
+            int[] linkStatus = new int[1];
+            //获取program的链接情况
+            GLES30.glGetProgramiv(program, GLES30.GL_LINK_STATUS, linkStatus, 0);
+            //若链接失败则报错并删除程序
+            if (linkStatus[0] != GLES30.GL_TRUE) {
+                Log.e("ES30_ERROR", "Could not link program: ");
+                Log.e("ES30_ERROR", GLES30.glGetProgramInfoLog(program));
+                GLES30.glDeleteProgram(program);
+                program = 0;
+            }
+        }
+        return program;
+    }
+
+    //创建shader程序的方法
+
+    /**
+     * @param vertexSource
+     * @param fragmentSource
+     * @param tag            tag
+     * @return
+     */
+    public static int createProgram(String vertexSource, String fragmentSource, String tag) {
+        Log.e("createProgram", "createProgram=" + tag);
+        //加载顶点着色器
+        int vertexShader = loadShader(GLES30.GL_VERTEX_SHADER, vertexSource);
+        if (vertexShader == 0) {
+            pinetree.lifenavi.log.Log.e("ShaderUtils", "vertexShader==0");
+            return 0;
+        }
+
+        //加载片元着色器
+        int pixelShader = loadShader(GLES30.GL_FRAGMENT_SHADER, fragmentSource);
+        if (pixelShader == 0) {
+            pinetree.lifenavi.log.Log.e("ShaderUtils", "pixelShader==0");
             return 0;
         }
 
